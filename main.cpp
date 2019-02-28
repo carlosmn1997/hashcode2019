@@ -1,5 +1,6 @@
 #include <iostream>
 #include <algorithm>
+#include <cstring>
 #include "Imagen.h"
 
 //#define CORBI
@@ -11,24 +12,35 @@ int get_comunes(Imagen& i1, Imagen& i2){
     int comunes = 0;
     for (int i = 0; i < i1.num_tags; i++){
         for (int j = 0; j < i2.num_tags; j++){
-            if(i1.tags[i] == i2.tags[j]){
+            if(i1.tags[i].compare(i2.tags[j])){
                 comunes++;
             }
         }
     }
 
-    int interes = min(comunes, i1.num_tags-comunes, i2.num_tags-comunes);
+    int interes = min(min(comunes, i1.num_tags-comunes), i2.num_tags-comunes);
     return interes;
 }
 
 #ifndef CORBI
 
+#define MAX_IMGS 100000
 int main(){
+
+    array<Imagen, MAX_IMGS> imagenes;
+    array<Imagen, MAX_IMGS> slides;
     // funcion corbalan
-    Imagen img1, img2;
-    //for (img1)
 
+//    slides[0] = imagenes[0];
+//    imagenes[0].usado= true;
+//    for (int i = 0; i < MAX_IMGS; ++i){
+//        int max_interes = 0;
+//        for (int j = 0; j < MAX_IMGS; ++j) {
+//
+//        }
+//    }
 
+    return 0;
 }
 
 #endif
