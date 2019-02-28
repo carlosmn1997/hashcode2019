@@ -11,7 +11,7 @@
 
 using namespace std;
 
-int get_comunes(Imagen& i1, Imagen& i2){
+int getInteres(Imagen& i1, Imagen& i2){
 
     // Numero comunes
     int comunes = 0;
@@ -32,6 +32,7 @@ int main(int argc, char** argv){
 
     vector<Imagen> verts = vector<Imagen>();
     vector<Imagen> horizs = vector<Imagen>();
+
 //    Imagen imagenes[MAX_IMGS];
     ifstream inFile(argv[1], ifstream::in);
     int totalImgs;
@@ -64,6 +65,31 @@ int main(int argc, char** argv){
         }
     }
     inFile.close();
+
+    vector<Imagen> slides = vector<Imagen>();
+    Imagen i1=horizs[0];
+//    horizs[0].usado= true;
+
+//    for (int i = 0; i < horizs.size()-1; ++i){
+//        int max_interes = -1;
+//        int index_max_interes = -1;
+//        if(!horizs[i].usado){
+//            i1 = horizs[i];
+//            horizs[i].usado= true;
+//        } else continue;
+//        for (int j = 0; j < horizs.size(); ++j) {
+//            if(horizs[j].usado and j!=i){
+//                continue;
+//            }
+//            int interes = getInteres(i1, horizs[j]);
+//            if (interes > max_interes){
+//                max_interes = interes;
+//                index_max_interes = j;
+//            }
+//        }
+//        slides.push_back(horizs[index_max_interes]);
+//        horizs[index_max_interes].usado = true;
+//    }
 
     return 0;
 }
