@@ -33,7 +33,6 @@ int main(int argc, char** argv){
     vector<Imagen> horizs = vector<Imagen>();
 
 //    Imagen imagenes[MAX_IMGS];
-    ifstream inFile(argv[1], ifstream::in);
     int totalImgs;
     inFile >> totalImgs;
     cout << totalImgs << endl;
