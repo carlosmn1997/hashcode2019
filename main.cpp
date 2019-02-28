@@ -7,8 +7,6 @@
 #include <array>
 #include <vector>
 
-#define MAX_TAGS 30
-
 using namespace std;
 
 int getInteres(Imagen& i1, Imagen& i2){
@@ -30,6 +28,7 @@ int getInteres(Imagen& i1, Imagen& i2){
 #define MAX_IMGS 2500
 int main(int argc, char** argv){
 
+    ifstream inFile(argv[1], ifstream::in);
     vector<Imagen> verts = vector<Imagen>();
     vector<Imagen> horizs = vector<Imagen>();
 
@@ -43,6 +42,7 @@ int main(int argc, char** argv){
     string tag;
     int totalHorizs = 0;
     int totalVerts = 0;
+    Imagen img;
     for (int i=0; i<totalImgs; i++) {
         cout << i << endl;
         inFile >> type;
@@ -52,11 +52,12 @@ int main(int argc, char** argv){
             inFile >> tag;
             tags[j] = tag;
         }
+        img = Imagen(i, -1, totalTags, tags);
         if (type == 'H') {
-            //horizs[totalHorizs] = Imagen(i, totalTags, tags);
+            horizs.push_back(img);
             totalHorizs++;
         } else {
-            //verts[totalVerts] = Imagen(i, totalTags, tags);
+            verts.push_back(img);
             totalVerts++;
         }
         cout << type << endl;
