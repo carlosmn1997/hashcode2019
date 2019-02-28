@@ -21,8 +21,7 @@ int getInteres(Imagen& i1, Imagen& i2){
         }
     }
 
-    int interes = min(min(comunes, i1.num_tags-comunes), i2.num_tags-comunes);
-    return interes;
+    return min(min(comunes, i1.num_tags-comunes), i2.num_tags-comunes);
 }
 
 #define MAX_IMGS 2500
@@ -117,6 +116,7 @@ int main(int argc, char** argv){
             }
         }
         slides.push_back(horizs[best_idx]);
+        lastSlide = horizs[best_idx];
         horizs.erase(horizs.begin()+best_idx);
     }
 
