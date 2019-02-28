@@ -48,7 +48,7 @@ int main(int argc, char** argv){
             inFile >> tag;
             tags[j] = tag;
         }
-        img = Imagen(i, -1, totalTags, tags);
+        img = Imagen(i, totalTags, tags);
         if (type == 'H') {
             horizs.push_back(img);
             totalHorizs++;
@@ -78,8 +78,8 @@ int main(int argc, char** argv){
         cout << "----" << endl;
     }*/
 
-    vector<Imagen> slides = vector<Imagen>();
-    /*Imagen i1=horizs[0];
+    /*vector<Imagen> slides = vector<Imagen>();
+    Imagen i1=horizs[0];
     horizs[0].usado= true;
 
     for (int i = 0; i < horizs.size()-1; ++i){
@@ -102,6 +102,23 @@ int main(int argc, char** argv){
         slides.push_back(horizs[index_max_interes]);
         horizs[index_max_interes].usado = true;
     }*/
+    vector<Imagen> slides = vector<Imagen>();
+    Imagen lastSlide = horizs[0];
+    slides.push_back(horizs[0]);    // Añadir a slides
+    horizs.erase(horizs.begin());// Eliminar de slides
+    while(!horizs.empty()) {
+        int best_int = -1;
+        int best_idx = 0;
+        for (int i=0; i<horizs.size(); i++) {
+            int interes = getInteres(lastSlide, horizs[i]);
+            if (interes > best_int) {
+                best_int = interes;
+                best_idx = i;
+            }
+        }
+        slides.push_back(horizs[best_idx]);
+        horizs.erase(horizs.begin()+best_idx);
+    }
 
     // Escritura salida
     ofstream outFile(argv[2], ofstream::out);
@@ -109,7 +126,9 @@ int main(int argc, char** argv){
     for (Imagen& slide : slides) {
         outFile << slide.id1;
         if (slide.id2 != -1) {
-            outFile << slide.id2 << endl;
+            outFile << " " << slide.id2 << endl;
+        } else {
+            outFile << endl;
         }
     }
     outFile.close();
