@@ -25,56 +25,15 @@ int getInteres(Imagen& i1, Imagen& i2){
     return interes;
 }
 
-int getCompatibilidad(Imagen i1, Imagen i2){
-
-    int numNoComunes = 0;
-    for (int i = 0; i < i1.num_tags; i++){
-        for (int j = 0; j < i2.num_tags; j++){
-            if(i1.tags[i] == i2.tags[j]){
-                numNoComunes++;
-            }
-        }
-    }
-    return numNoComunes;
-}
-
-vector<Imagen> mezclaVertical(vector<Imagen> vertics){
-    vector<Imagen> res = vector<Imagen>();
-
-    Imagen i1 = vertics[0];
-    for (int i = 0; i < vertics.size()-1; ++i) {
-        int max_diferentes = -1;
-        int index_max_interes = -1;
-        if (!vertics[i].usado) {
-            i1 = vertics[i];
-            vertics[i].usado = true;
-        } else continue;
-        for (int j = 0; j < vertics.size(); ++j) {
-            if (vertics[j].usado and j != i) {
-                continue;
-            }
-            int diferencia = getInteres(i1, vertics[j]);
-            if (diferencia > max_diferentes) {
-                max_diferentes = diferencia;
-                index_max_interes = j;
-            }
-        }
-    }
-
-    return res;
-}
-
 #define MAX_IMGS 2500
 int main(int argc, char** argv){
 
+    // Lectura entrada
     ifstream inFile(argv[1], ifstream::in);
     vector<Imagen> verts = vector<Imagen>();
     vector<Imagen> horizs = vector<Imagen>();
-
-//    Imagen imagenes[MAX_IMGS];
     int totalImgs;
     inFile >> totalImgs;
-    cout << totalImgs << endl;
     char type;
     int totalTags;
     string tag;
@@ -82,7 +41,6 @@ int main(int argc, char** argv){
     int totalVerts = 0;
     Imagen img;
     for (int i=0; i<totalImgs; i++) {
-        cout << i << endl;
         inFile >> type;
         inFile >> totalTags;
         array<string, MAX_TAGS> tags = array<string, MAX_TAGS>();
@@ -90,7 +48,7 @@ int main(int argc, char** argv){
             inFile >> tag;
             tags[j] = tag;
         }
-        img = Imagen(i, -1, totalTags, tags);
+        img = Imagen(i, totalTags, tags);
         if (type == 'H') {
             horizs.push_back(img);
             totalHorizs++;
@@ -98,24 +56,40 @@ int main(int argc, char** argv){
             verts.push_back(img);
             totalVerts++;
         }
-        cout << type << endl;
-        for (int k=0; k<totalTags; k++) {
-            cout << tags[k] << endl;
-        }
     }
     inFile.close();
+    // Depuración lectura entrada
+    /*for (Imagen imag : verts) {
+        cout << imag.id1 << endl;
+        cout << imag.id2 << endl;
+        cout << imag.num_tags << endl;
+        for (int k = 0; k<imag.num_tags; k++) {
+            cout << imag.tags[k] << endl;
+        }
+        cout << "----" << endl;
+    }
+    for (Imagen imag : horizs) {
+        cout << imag.id1 << endl;
+        cout << imag.id2 << endl;
+        cout << imag.num_tags << endl;
+        for (int k = 0; k<imag.num_tags; k++) {
+            cout << imag.tags[k] << endl;
+        }
+        cout << "----" << endl;
+    }*/
 
-    vector<Imagen> slides = vector<Imagen>();
-    Imagen i1 = horizs[0];
-    horizs[0].usado = true;
-    slides.push_back(horizs[0]);
+    /*vector<Imagen> slides = vector<Imagen>();
+    Imagen i1=horizs[0];
+    horizs[0].usado= true;
 
-
-    for (int i = 1; i < horizs.size()-1; ++i){
+    for (int i = 0; i < horizs.size()-1; ++i){
         int max_interes = -1;
         int index_max_interes = -1;
-
-        for (int j = 1; j < horizs.size(); ++j) {
+        if(!horizs[i].usado){
+            i1 = horizs[i];
+            horizs[i].usado= true;
+        } else continue;
+        for (int j = 0; j < horizs.size(); ++j) {
             if(horizs[j].usado and j!=i){
                 continue;
             }
@@ -127,7 +101,37 @@ int main(int argc, char** argv){
         }
         slides.push_back(horizs[index_max_interes]);
         horizs[index_max_interes].usado = true;
+    }*/
+    vector<Imagen> slides = vector<Imagen>();
+    Imagen lastSlide = horizs[0];
+    slides.push_back(horizs[0]);    // Añadir a slides
+    horizs.erase(horizs.begin());// Eliminar de slides
+    while(!horizs.empty()) {
+        int best_int = -1;
+        int best_idx = 0;
+        for (int i=0; i<horizs.size(); i++) {
+            int interes = getInteres(lastSlide, horizs[i]);
+            if (interes > best_int) {
+                best_int = interes;
+                best_idx = i;
+            }
+        }
+        slides.push_back(horizs[best_idx]);
+        horizs.erase(horizs.begin()+best_idx);
     }
+
+    // Escritura salida
+    ofstream outFile(argv[2], ofstream::out);
+    outFile << slides.size() << endl;
+    for (Imagen& slide : slides) {
+        outFile << slide.id1;
+        if (slide.id2 != -1) {
+            outFile << " " << slide.id2 << endl;
+        } else {
+            outFile << endl;
+        }
+    }
+    outFile.close();
 
     return 0;
 }
