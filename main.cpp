@@ -28,14 +28,12 @@ int getInteres(Imagen& i1, Imagen& i2){
 #define MAX_IMGS 2500
 int main(int argc, char** argv){
 
+    // Lectura entrada
     ifstream inFile(argv[1], ifstream::in);
     vector<Imagen> verts = vector<Imagen>();
     vector<Imagen> horizs = vector<Imagen>();
-
-//    Imagen imagenes[MAX_IMGS];
     int totalImgs;
     inFile >> totalImgs;
-    cout << totalImgs << endl;
     char type;
     int totalTags;
     string tag;
@@ -43,7 +41,6 @@ int main(int argc, char** argv){
     int totalVerts = 0;
     Imagen img;
     for (int i=0; i<totalImgs; i++) {
-        cout << i << endl;
         inFile >> type;
         inFile >> totalTags;
         array<string, MAX_TAGS> tags = array<string, MAX_TAGS>();
@@ -59,15 +56,30 @@ int main(int argc, char** argv){
             verts.push_back(img);
             totalVerts++;
         }
-        cout << type << endl;
-        for (int k=0; k<totalTags; k++) {
-            cout << tags[k] << endl;
-        }
     }
     inFile.close();
+    // Depuración lectura entrada
+    /*for (Imagen imag : verts) {
+        cout << imag.id1 << endl;
+        cout << imag.id2 << endl;
+        cout << imag.num_tags << endl;
+        for (int k = 0; k<imag.num_tags; k++) {
+            cout << imag.tags[k] << endl;
+        }
+        cout << "----" << endl;
+    }
+    for (Imagen imag : horizs) {
+        cout << imag.id1 << endl;
+        cout << imag.id2 << endl;
+        cout << imag.num_tags << endl;
+        for (int k = 0; k<imag.num_tags; k++) {
+            cout << imag.tags[k] << endl;
+        }
+        cout << "----" << endl;
+    }*/
 
     vector<Imagen> slides = vector<Imagen>();
-    Imagen i1=horizs[0];
+    /*Imagen i1=horizs[0];
     horizs[0].usado= true;
 
     for (int i = 0; i < horizs.size()-1; ++i){
@@ -89,7 +101,18 @@ int main(int argc, char** argv){
         }
         slides.push_back(horizs[index_max_interes]);
         horizs[index_max_interes].usado = true;
+    }*/
+
+    // Escritura salida
+    ofstream outFile(argv[2], ofstream::out);
+    outFile << slides.size() << endl;
+    for (Imagen& slide : slides) {
+        outFile << slide.id1;
+        if (slide.id2 != -1) {
+            outFile << slide.id2 << endl;
+        }
     }
+    outFile.close();
 
     return 0;
 }
