@@ -7,11 +7,24 @@
 
 #define MAX_TAGS 100
 
+#include <iostream>
 #include <string>
+#include <array>
+using namespace std;
 
 class Imagen {
+public:
+    int id;
     int num_tags;
-    string[MAX_TAGS] tags;
+    array<string, MAX_TAGS> tags = array<string, MAX_TAGS>();
+
+    Imagen(int _id, int _num_tags, array<string, MAX_TAGS>& _tags){
+        id = _id;
+        num_tags = _num_tags;
+        array<string, MAX_TAGS> tags = _tags;
+    }
+
+    Imagen() {}
 };
 
 

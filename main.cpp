@@ -2,7 +2,7 @@
 #include <algorithm>
 #include "Imagen.h"
 
-#define CORBI
+//#define CORBI
 using namespace std;
 
 int get_comunes(Imagen& i1, Imagen& i2){
@@ -16,11 +16,7 @@ int get_comunes(Imagen& i1, Imagen& i2){
             }
         }
     }
-    return comunes;
-}
 
-int get_interes(Imagen& i1, Imagn& i2){
-    int comunes = get_comunes(i1, i2);
     int interes = min(comunes, i1.num_tags-comunes, i2.num_tags-comunes);
     return interes;
 }
@@ -29,6 +25,8 @@ int get_interes(Imagen& i1, Imagn& i2){
 
 int main(){
     // funcion corbalan
+    Imagen img1, img2;
+    //for (img1)
 
 
 }
