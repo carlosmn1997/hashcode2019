@@ -24,6 +24,18 @@ int getInteres(Imagen& i1, Imagen& i2){
     return min(min(comunes, i1.num_tags-comunes), i2.num_tags-comunes);
 }
 
+int getCoincidentes(Imagen& i1, Imagen& i2) {
+    int comunes = 0;
+    for (int i = 0; i < i1.num_tags; i++){
+        for (int j = 0; j < i2.num_tags; j++){
+            if(i1.tags[i] == i2.tags[j]){
+                comunes++;
+            }
+        }
+    }
+    return comunes;
+}
+
 #define MAX_IMGS 2500
 int main(int argc, char** argv){
 
@@ -101,6 +113,28 @@ int main(int argc, char** argv){
         slides.push_back(horizs[index_max_interes]);
         horizs[index_max_interes].usado = true;
     }*/
+    //Imagen lastVert = verts[0];
+    //verts.erase(verts.begin());
+    while(verts.size() > 1) {
+        Imagen lastVert = verts[0];
+        verts.erase(verts.begin());
+        int min_comunes = 100000;
+        int min_idx = 0;
+        for (int i=0; i<verts.size(); i++) {
+            int comunes = getCoincidentes(lastVert, verts[i]);
+            if (comunes < min_comunes) {
+                min_comunes = comunes;
+                min_idx = i;
+            }
+        }
+        array<string, MAX_TAGS> mergedTags = array<string, MAX_TAGS>();
+        merge(lastVert.tags.begin(), lastVert.tags.begin()+lastVert.num_tags-1, verts[min_idx].tags.begin(), verts[min_idx].tags.begin()+verts[min_idx].num_tags-1, mergedTags.begin());
+        Imagen merged = Imagen(lastVert.id1, verts[min_idx].id1, lastVert.num_tags+verts[min_idx].num_tags, mergedTags);
+        horizs.push_back(merged);
+        verts.erase(verts.begin() + min_idx);
+        //lastVert = verts[0];
+    }
+
     vector<Imagen> slides = vector<Imagen>();
     Imagen lastSlide = horizs[0];
     slides.push_back(horizs[0]);    // Añadir a slides
@@ -118,6 +152,7 @@ int main(int argc, char** argv){
         slides.push_back(horizs[best_idx]);
         lastSlide = horizs[best_idx];
         horizs.erase(horizs.begin()+best_idx);
+        //cout << slides.size() << endl;
     }
 
     // Escritura salida
