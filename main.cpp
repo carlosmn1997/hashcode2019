@@ -15,7 +15,7 @@ int getInteres(Imagen& i1, Imagen& i2){
     int comunes = 0;
     for (int i = 0; i < i1.num_tags; i++){
         for (int j = 0; j < i2.num_tags; j++){
-            if(i1.tags[i].compare(i2.tags[j])){
+            if(i1.tags[i] == i2.tags[j]){
                 comunes++;
             }
         }
