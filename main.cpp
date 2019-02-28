@@ -15,7 +15,7 @@ int getInteres(Imagen& i1, Imagen& i2){
     int comunes = 0;
     for (int i = 0; i < i1.num_tags; i++){
         for (int j = 0; j < i2.num_tags; j++){
-            if(i1.tags[i].compare(i2.tags[j])){
+            if(i1.tags[i] == i2.tags[j]){
                 comunes++;
             }
         }
@@ -23,6 +23,45 @@ int getInteres(Imagen& i1, Imagen& i2){
 
     int interes = min(min(comunes, i1.num_tags-comunes), i2.num_tags-comunes);
     return interes;
+}
+
+int getCompatibilidad(Imagen i1, Imagen i2){
+
+    int numNoComunes = 0;
+    for (int i = 0; i < i1.num_tags; i++){
+        for (int j = 0; j < i2.num_tags; j++){
+            if(i1.tags[i] == i2.tags[j]){
+                numNoComunes++;
+            }
+        }
+    }
+    return numNoComunes;
+}
+
+vector<Imagen> mezclaVertical(vector<Imagen> vertics){
+    vector<Imagen> res = vector<Imagen>();
+
+    Imagen i1 = vertics[0];
+    for (int i = 0; i < vertics.size()-1; ++i) {
+        int max_diferentes = -1;
+        int index_max_interes = -1;
+        if (!vertics[i].usado) {
+            i1 = vertics[i];
+            vertics[i].usado = true;
+        } else continue;
+        for (int j = 0; j < vertics.size(); ++j) {
+            if (vertics[j].usado and j != i) {
+                continue;
+            }
+            int diferencia = getInteres(i1, vertics[j]);
+            if (diferencia > max_diferentes) {
+                max_diferentes = diferencia;
+                index_max_interes = j;
+            }
+        }
+    }
+
+    return res;
 }
 
 #define MAX_IMGS 2500
@@ -67,17 +106,16 @@ int main(int argc, char** argv){
     inFile.close();
 
     vector<Imagen> slides = vector<Imagen>();
-    Imagen i1=horizs[0];
-    horizs[0].usado= true;
+    Imagen i1 = horizs[0];
+    horizs[0].usado = true;
+    slides.push_back(horizs[0]);
 
-    for (int i = 0; i < horizs.size()-1; ++i){
+
+    for (int i = 1; i < horizs.size()-1; ++i){
         int max_interes = -1;
         int index_max_interes = -1;
-        if(!horizs[i].usado){
-            i1 = horizs[i];
-            horizs[i].usado= true;
-        } else continue;
-        for (int j = 0; j < horizs.size(); ++j) {
+
+        for (int j = 1; j < horizs.size(); ++j) {
             if(horizs[j].usado and j!=i){
                 continue;
             }
