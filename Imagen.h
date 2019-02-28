@@ -20,18 +20,18 @@ public:
     int num_tags;
     array<string, MAX_TAGS> tags = array<string, MAX_TAGS>();
 
-    Imagen(int _id1, int _id2, int _num_tags, array<string, MAX_TAGS> _tags){
+    Imagen(int _id1, int _id2, int _num_tags, array<string, MAX_TAGS>& _tags){
         id1 = _id1;
         id2 = _id2;
         num_tags = _num_tags;
-        array<string, MAX_TAGS> tags = _tags;
+        tags = _tags;
     }
 
-    Imagen(int _id1, int _num_tags, array<string, MAX_TAGS> _tags){
+    Imagen(int _id1, int _num_tags, array<string, MAX_TAGS>& _tags){
         id1 = _id1;
         id2 = -1;
         num_tags = _num_tags;
-        array<string, MAX_TAGS> tags = _tags;
+        tags = _tags;
     }
 
     Imagen() {}
