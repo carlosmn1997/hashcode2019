@@ -1,1 +1,0 @@
-print("hola wenas aki willireh")
